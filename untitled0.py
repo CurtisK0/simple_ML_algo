@@ -51,7 +51,7 @@ x = df[features]
 y = df['Target_5d_Fwd_Change']
 x_base_train = x.loc['2020-01-01':'2025-01-01']
 y_base_train = y.loc['2020-01-01':'2025-01-01']
-X_test = X.loc['2025-01-02':]
+_test = .loc['2025-01-02':]
 y_test = y.loc['2025-01-02':]
 
 
@@ -70,7 +70,7 @@ rolling_prediction = [] # Stores the daily % change prediction to average them
 x_dy_training = x_base_train.copy()
 y_dy_training = y_base_train.copy()
 
-for date, row in X_test.iterrows():
+for date, row in _test.iterrows():
     model = RandomForestRegressor(n_estimators=1000, random_state=18, n_jobs=-1)
     model.fit(x_dy_training, y_dy_training)
     current_features = row.values.reshape(1, -1)
@@ -94,7 +94,7 @@ for date, row in X_test.iterrows():
         print(f"--> ACTUAL price 1 week out:    ${actual_price_calc:.2f}\n")
     except KeyError:
         pass # End of dataset
-    x_dy_training = pd.concat([x_dy_training, pd.DataFrame([row], columns=X.columns)])
+    x_dy_training = pd.concat([x_dy_training, pd.DataFrame([row], columns=.columns)])
     y_dy_training = pd.concat([y_dy_training, pd.Series([y.loc[date]], index=[date])])
 
 if actuals:
@@ -102,9 +102,9 @@ if actuals:
     print(f"Average Prediction Error for 2026: ${error:.2f} per share")
 
 #prediction of known
-latest_data = X.iloc[-1].values.reshape(1, -1)
+latest_data = .iloc[-1].values.reshape(1, -1)
 future_change = model.predict(latest_data)[0]
-final_predicted_price = X.iloc[-1]['Stock_Price'] * (1 + future_change)
+final_predicted_price = .iloc[-1]['Stock_Price'] * (1 + future_change)
 
 print(f"*** BLIND PREDICTION FOR 1 WEEK FROM TODAY: ${final_predicted_price:.2f} ***")
 
@@ -121,7 +121,7 @@ print(f"*** BLIND PREDICTION FOR 1 WEEK FROM TODAY: ${final_predicted_price:.2f}
 
 
 #Graphing inputs prediction and result.
-dates = X_test.index[:len(prediction)]
+dates = _test.index[:len(prediction)]
 
 fig, ax1 = plt.subplots(figsize=(14, 8))
 
@@ -135,14 +135,14 @@ ax1.grid(True, alpha=0.3)
 
 # QQQ
 ax2 = ax1.twinx()
-ax2.plot(dates, X_test['QQQ_1w_Trend'][:len(dates)], label='QQQ 1-Week Trend', color='purple', alpha=0.4)
+ax2.plot(dates, _test['QQQ_1w_Trend'][:len(dates)], label='QQQ 1-Week Trend', color='purple', alpha=0.4)
 ax2.set_ylabel('QQQ Growth %', fontsize=12, color='purple')
 ax2.tick_params(axis='y', labelcolor='purple')
 
 # Inflation
 ax3 = ax1.twinx()
 ax3.spines['right'].set_position(('outward', 60))
-ax3.plot(dates, X_test['Inflation_CPI'][:len(dates)], label='Inflation (CPI)', color='green', linestyle=':', alpha=0.6)
+ax3.plot(dates, _test['Inflation_CPI'][:len(dates)], label='Inflation (CPI)', color='green', linestyle=':', alpha=0.6)
 ax3.set_ylabel('Inflation CPI', fontsize=12, color='green')
 ax3.tick_params(axis='y', labelcolor='green')
 
