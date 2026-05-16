@@ -51,7 +51,7 @@ x = df[features]
 y = df['Target_5d_Fwd_Change']
 x_base_train = x.loc['2020-01-01':'2025-01-01']
 y_base_train = y.loc['2020-01-01':'2025-01-01']
-_test = .loc['2025-01-02':]
+x_test = x.loc['2025-01-02':]
 y_test = y.loc['2025-01-02':]
 
 
